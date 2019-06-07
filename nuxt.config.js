@@ -1,5 +1,7 @@
 const pkg = require('./package')
 
+require('dotenv').config()
+
 module.exports = {
   mode: 'universal',
 
@@ -26,30 +28,40 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: [
-  ],
+    css: [
+        { src: '~/assets/sass/common.scss', lang: 'scss' },
+    ],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
+      '~/plugins/axios' // dotenv
   ],
 
   /*
   ** Nuxt.js modules
   */
   modules: [
-    // Doc: https://github.com/nuxt-community/axios-module#usage
-    '@nuxtjs/axios',
-    // Doc:https://github.com/nuxt-community/modules/tree/master/packages/bulma
-    '@nuxtjs/bulma'
+      // Doc: https://github.com/nuxt-community/axios-module#usage
+      '@nuxtjs/axios',
+      '@nuxtjs/proxy',
+      // Doc:https://github.com/nuxt-community/modules/tree/master/packages/bulma
+      '@nuxtjs/bulma',
+      '@nuxtjs/dotenv', // dotenv
+      ['nuxt-sass-resources-loader', [
+          '~/assets/sass/_variable.scss',
+      ]],
   ],
   /*
   ** Axios module configuration
   */
-  axios: {
-    // See https://github.com/nuxt-community/axios-module#options
-  },
+    axios: {
+        proxy: true
+    },
+    proxy: {
+        '/api': 'http://app.kidsweekend.test:8888'
+    },
 
   /*
   ** Build configuration
@@ -68,5 +80,9 @@ module.exports = {
     extend(config, ctx) {
       
     }
+  },
+
+  env: {
+      API_URL: process.env.API_URL
   }
 }

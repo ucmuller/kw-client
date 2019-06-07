@@ -1,34 +1,33 @@
 <template>
-  <section class="container">
-    <div>
-      <logo/>
-      <h1 class="title">
-        client
-      </h1>
-      <h2 class="subtitle">
-        Kidsweekend Project Client
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green">Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey">GitHub</a>
-      </div>
-    </div>
-  </section>
+    <section>
+        <h1>Hello world.</h1>
+        <div v-if="$store.state.auth.user">
+            <nuxt-link to="/user/me/Me">secret</nuxt-link>
+        </div>
+        <div v-else>
+            <nuxt-link to="/user/auth/Login">login</nuxt-link>
+        </div>
+        <div>
+            {{ response }}
+        </div>
+    </section>
 </template>
 
 <script>
 import Logo from '~/components/Logo.vue'
 
 export default {
-  components: {
-    Logo
-  }
+    components: {
+        Logo
+    },
+    asyncData({ app }) {
+        return app.$axios.$get('api/v1/kw/event-details')
+            .then(res => {
+                return { response: res }
+            }).catch(e => {
+                console.log(e)
+            })
+    }
 }
 </script>
 
