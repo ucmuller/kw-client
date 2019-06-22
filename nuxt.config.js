@@ -36,7 +36,8 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-      '~/plugins/axios' // dotenv
+      '~/plugins/axios' ,// dotenv
+      { src: '~/plugins/vue2-google-maps.js', ssr: false }
   ],
 
   /*
@@ -77,12 +78,23 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
-    extend(config, ctx) {
-      
+   extend(config, ctx) {
+      config.externals = config.externals || [];
+      if (!ctx.isClient) {
+        config.externals.splice(0, 0, function(context, request, callback) {
+          if (/^vue2-google-maps($|\/)/.test(request)) {
+            callback(null, false);
+          } else {
+            callback();
+          }
+        });
+      }
     }
   },
 
   env: {
       API_URL: process.env.API_URL
-  }
+  },
+  vendor: ['vue2-google-maps']
+
 }

@@ -8,7 +8,7 @@
             <nuxt-link to="/user/auth/Login">login</nuxt-link>
         </div>
         <div>
-            {{ response }}
+       
         </div>
     </section>
 </template>
